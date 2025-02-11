@@ -77,7 +77,7 @@ int main() {
         int kontrolka = naplneniRC("kontrolni cislici za lomitkem", 0, 999);
 
         rok = ziskejDveCislice(rok);
-        sprintf(str, "%02d", rok);
+        sprintf(str, "%02d", rok); // sprintf je neco jako obraceny atoi
         strcat(rodneCislo, str);
 
         // pokud je zena, tak mesic je o 50 vetsi
