@@ -1,0 +1,3 @@
+C:/Users/Dominik/CLionProjects/ukolprp/cmake-build-debug/CMakeFiles/ukolprp.dir
+C:/Users/Dominik/CLionProjects/ukolprp/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Dominik/CLionProjects/ukolprp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
