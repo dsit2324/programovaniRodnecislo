@@ -54,7 +54,7 @@ void validni(char * rodneCislo) {
         zbytek = atoi(prvni9Znaky) % 11;
         if (zbytek == 10) {
             int posledniTri = atoi(&rodneCislo[6]);
-            posledniTri = (posledniTri + 1) % 1000;
+            posledniTri = (posledniTri + 1) % 1000; // pokud kontrolka presahne 999, vrati se na nulu
             sprintf(&rodneCislo[6], "%03d", posledniTri);
         }
     } while (zbytek == 10);
