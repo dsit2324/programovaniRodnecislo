@@ -52,24 +52,51 @@ int ziskejDveCislice(int rok) {
 void validni(char *rodneCislo) {
     char prvni9Znaky[DELKARC];
     int zbytek;
+    int hlaska = 0;
+
     do {
-        strncpy(prvni9Znaky, rodneCislo, 9); // ziskame prvnich 9 znaku z rodneho cisla do prvni9Znaky
-        prvni9Znaky[9] = '\0'; // kvuli referenci nakonec pridame radeji binarni nulu.
+        strncpy(prvni9Znaky, rodneCislo, 9); // ziskame prvnich 9 znaku
+        prvni9Znaky[9] = '\0'; // pridani binarni nuly
         zbytek = atoi(prvni9Znaky) % 11;
+
         if (zbytek == 10) {
-            int posledniTri = atoi(&rodneCislo[6]);
-            posledniTri = (posledniTri + 1) % 1000; // pokud kontrolka presahne 999, vrati se na nulu
-            sprintf(&rodneCislo[6], "%03d", posledniTri);
+            hlaska = 1; // nastaveni hlasky pro zbytek je 10
+            int posledniTri = atoi(&rodneCislo[6]); // posledni 3 cisla
+            posledniTri = (posledniTri + 1) % 1000; // dopocitavani
+            sprintf(&rodneCislo[6], "%03d", posledniTri); // ulozeni zpet do rodneho cisla
         }
-    } while (zbytek == 10); // generovani (dopocitavani) do rodnehoCisla, aby bylo validni
-    rodneCislo[9] = (zbytek + '0');
-    // '0' je znakova nula (prevede zbytek na char), hodnota 48
+    } while (zbytek == 10); // opakujeme, dokud není zbytek 10
+
+    rodneCislo[9] = (zbytek + '0'); // 10 znak podle zbytku
+
+    // Pokud byla zmena (zbytek byl 10)
+    if (hlaska == 1) {
+        printf("Puvodni zbytek byl 10. Muselo se generovat.\n");
+    }
+}
+
+
+
+int ukonceni(int enterFlag){
+    int countOfChar;
+    char enter;
+    printf("Pro opakovane zadani rodneho cisla stiskni Enter.\n");
+    scanf("%c", &enter); // Nacte skutecny stisk Enteru
+    while (getchar() != '\n') {
+        countOfChar++;
+    }
+    if (countOfChar != 0) {
+        enterFlag = 0;
+    } else if (enter != '\n') {
+        enterFlag = 0;
+    } return enterFlag;
+    // Pokud uzivatel stiskl Enter, opakujeme, jinak ukoncime
+
 }
 
 int main() {
     char rodneCislo[DELKARC + 1] = ""; // +1 kvuli \0
     char str[6]; // pro formatovani cisel
-    char enter; // pro kontrolu stisku Enteru
     int enterFlag = 1; // vlajka pro opakovani (1 = opakovat, 0 = ukoncit)
 
     do {
@@ -81,7 +108,6 @@ int main() {
         int den = naplneniRC("den", 1, maxDen);
         int pohlavi = naplneniRC("pohlavi (0 - zena, 1 - muz)", 0, 1);
         int kontrolka = naplneniRC("kontrolni cislici za lomitkem", 0, 999);
-        int countOfChar = 0;
 
         rok = ziskejDveCislice(rok);
         sprintf(str, "%02d", rok); // sprintf je neco jako obraceny atoi
@@ -105,21 +131,9 @@ int main() {
 
         printf("Bylo vytvoreno validni rodne cislo: %s\n", rodneCislo);
 
-        // Před opakováním vyčistíme buffer a čekáme na Enter
-        printf("Pro opakovane zadani rodneho cisla stiskni Enter.\n");
-        scanf("%c", &enter); // Nacte skutecny stisk Enteru
-        while (getchar() != '\n') {
-            countOfChar++;
-        }
-        if (countOfChar != 0) {
-            enterFlag = 0;
-        } else if (enter != '\n') {
-            enterFlag = 0;
-        }
-        // Pokud uzivatel stiskl Enter, opakujeme, jinak ukoncime
-        // resetovani rodneho cisla pro opakovani
-        memset(rodneCislo, 0, sizeof(rodneCislo)); /* neco jako free pro staticke pole, nula se zde
-        pouziva jako NULL */
-    } while (enterFlag == 1);
+        memset(rodneCislo, 0, sizeof(rodneCislo)); // vyprazdneni statickeho pole
+
+    } while (ukonceni(enterFlag) == 1);
+
     return 0;
 }
